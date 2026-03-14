@@ -1,13 +1,9 @@
-package Arrays;
+package ArraysAndStrings;
 
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.Collections;
 
-public class Hashmap {
+public class Hashing {
 
     public static void printResult(int[] res) {
         if (res == null) {
@@ -64,12 +60,71 @@ public class Hashmap {
         return freq.isEmpty();
     }
 
-    public int[] topKFrequent(int[] nums, int k) {      // very important for Syntaxwise
+    /* Top K Frequent Elements — Problem
+Input
+•
+An integer array nums
+•
+An integer k
+Output
+•
+The k most frequent elements in nums, in any order.
+Example
+nums = [1, 1, 1, 2, 2, 3]
+k = 2
+
+Frequencies:
+  1 → 3 times
+  2 → 2 times
+  3 → 1 time
+
+Answer: [1, 2]  (or [2, 1])*/
+    public static Float FindMax(float [] arr){
+        Float max = Float.MIN_VALUE;
+        for(float nums : arr){
+            max = Math.max(max , nums);
+        }
+        return max;
+    }
+    public static ArrayList<Float> BuketSort(float [] arr){
+        if(arr.length == 0) return new ArrayList<>();
+
+        //find the bucket size
+        float maxElement = FindMax(arr);
+        int maxIndex = (int)(maxElement*arr.length);
+        int bucketSize = maxIndex+1;
+
+        // initialize bucket list
+        ArrayList<Float> bucket[] = new ArrayList[bucketSize];
+        for(int i=0; i<bucketSize; i++){
+            bucket[i] = new ArrayList<>();
+        }
+
+        //insert elemnts in bucket
+        for(int i=0; i<arr.length; i++){
+            int index = (int)(arr.length*arr[i]);
+            bucket[index].add(arr[i]);
+        }
+
+//        sort the individual elements
+        for(int i=0; i<bucketSize; i++){
+            Collections.sort(bucket[i]);
+        }
+        ArrayList<Float> res = new ArrayList<>();
+        for(int i=0; i<bucketSize; i++){
+            for(Float elements : bucket[i]) {
+                res.add(elements);
+            }
+        }
+        return res;
+    }
+
+    public int[] topKFrequent(int[] nums, int k) {      // very important for SyntaxWise
         HashMap<Integer, Integer> freq = new HashMap<>();
         for (int num : nums) {
             freq.put(num, freq.getOrDefault(num, 0) + 1);
         }
-          List<Integer>[] buckets = new List[nums.length+1];
+        List<Integer>[] buckets = new List[nums.length+1];
         for(Map.Entry<Integer , Integer> entery : freq.entrySet()){
             int count = entery.getValue();
             if(buckets[count] == null) buckets[count] = new ArrayList<>();
@@ -86,6 +141,36 @@ public class Hashmap {
         }
         return result;
     }
+
+    // Top K Frequent — Heap approach: min-heap of size k by frequency
+    public int[] topKFrequentHeap(int[] nums, int k) {
+        Map<Integer, Integer> freq = new HashMap<>();
+        for (int num : nums) {
+            freq.put(num, freq.getOrDefault(num, 0) + 1);
+        }
+        // Min-heap: compare by frequency (a[1], b[1]). Smallest freq at top.
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a, b) -> a[1] - b[1]);
+
+        for (Map.Entry<Integer, Integer> e : freq.entrySet()) {
+            int num = e.getKey();
+            int count = e.getValue();
+            minHeap.add(new int[]{num, count});
+            if (minHeap.size() > k) {
+                minHeap.poll(); // remove the entry with smallest frequency
+            }
+        }
+
+        int[] result = new int[k];
+        for (int i = 0; i < k; i++) {
+            result[i] = minHeap.poll()[0];
+        }
+        return result;
+    }
+    /* Examples
+1.
+nums = [100, 4, 200, 1, 3, 2]
+Possible consecutive sequence: 1, 2, 3, 4 → length = 4
+Answer: 4*/
 
     public int longestConsecutive(int[] nums) {
         if(nums.length == 0 || nums == null) return 0;
@@ -109,6 +194,25 @@ public class Hashmap {
         return longest;
     }
 
+        /* Examples
+•
+s = "egg", t = "add" → true
+◦
+e -> a, g -> d → mapping is consistent and one-to-one.
+•
+s = "foo", t = "bar" → false
+◦
+f -> b, o -> a and o -> r (conflict).
+•
+s = "paper", t = "title" → true
+◦
+p->t, a->i, p->t, e->l, r->e (consistent in both directions).
+•
+s = "badc", t = "baba" → false
+◦
+b->b, a->a, d->b (but b already mapped from b), so two different chars map to same t char.*/
+
+
     public boolean isIsomorphic(String s, String t) {
         if(s.length() != t.length()) return false;
 
@@ -127,6 +231,24 @@ public class Hashmap {
         }
             return true;
     }
+
+    /* Examples
+•
+pattern = "abba", s = "dog cat cat dog" → true
+◦
+a -> dog, b -> cat, mapping is consistent both ways.
+•
+pattern = "abba", s = "dog cat cat fish" → false
+◦
+a -> dog, b -> cat, but last word is fish, not dog.
+•
+pattern = "aaaa", s = "dog cat cat dog" → false
+◦
+a would need to map to both dog and cat.
+•
+pattern = "abba", s = "dog dog dog dog" → false
+◦
+a -> dog, but then b also tries to map to dog (two different pattern chars to same word).*/
 
     public boolean wordPattern(String pattern, String s) {
         String [] words = s.split(" ");
@@ -161,6 +283,26 @@ public class Hashmap {
         return ans;
     }
 
+    /*  Examples
+•
+s = "cbaebabacd", p = "abc"
+Substrings of length 3:
+◦
+"cba" (index 0) → anagram of "abc"
+◦
+"bae" (1) → no
+◦
+"aeb" (2) → no
+◦
+"eba" (3) → no
+◦
+"bab" (4) → no
+◦
+"aba" (5) → anagram of "abc"
+◦
+"bac" (6) → anagram of "abc"
+Answer: [0, 6]*/
+
     public List<Integer> findAnagrams(String s, String p) {
         List<Integer> result = new ArrayList<>();
         int n = s.length(); int m = p.length();
@@ -181,6 +323,13 @@ public class Hashmap {
         if(matches == 26) result.add(0);
     }
 
+    /* Examples
+•
+ransomNote = "a", magazine = "b" → false (no a).
+•
+ransomNote = "aa", magazine = "ab" → false (only one a in magazine).
+•
+ransomNote = "aa", magazine = "aab" → true (magazine has two as).*/
     public boolean canConstruct(String ransomNote, String magazine) {
 
         int count[] = new int[26];

@@ -16,7 +16,7 @@ The goal is to build strong problem-solving intuition by grouping problems by te
 
 ### Current Patterns Covered
 
-- **Arrays + Two Pointers**
+- **ArraysAndStrings + Two Pointers**
   - Classic problems like:
     - `Two Sum II (input array sorted)`
     - Valid Palindrome / Valid Palindrome II
@@ -29,7 +29,7 @@ The goal is to build strong problem-solving intuition by grouping problems by te
     - Using `left` / `right` pointers efficiently.
     - Understanding when to move which pointer and why.
 
-- **Arrays + HashMap**
+- **ArraysAndStrings + HashMap**
   - Problems that use frequency counting or complement lookup.
   - Builds intuition for when to trade space for time with hash maps.
 
@@ -40,13 +40,13 @@ The goal is to build strong problem-solving intuition by grouping problems by te
 - `src/Main.java`  
   - Basic entry point (can be used for quick tests).
 
-- `src/Arrays/TwoPointers.java`  
+- `src/ArraysAndStrings/TwoPointers.java`  
   - Contains multiple **two-pointer based** solutions (LeetCode-style problems).
 
-- `src/Arrays/Hashmap.java`  
+- `src/ArraysAndStrings/Hashmap.java`  
   - Contains **hash map based** array solutions.
 
-- `src/Arrays/ThreeSum.java`  
+- `src/ArraysAndStrings/ThreeSum.java`  
   - Dedicated implementation and demo for the **3Sum** problem.
 
 ### How To Run
